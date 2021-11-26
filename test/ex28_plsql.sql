@@ -166,4 +166,177 @@ begin
 end;
 
 
+declare
+    vnum number := 1;
+begin
+    loop
+        dbms_output.put_line(to_char(sysdate, 'hh24:mi:ss'));
+        
+        vnum := vnum + 1;
+        exit when vnum > 10;
+    end loop;
+end;
 
+
+begin
+    for i in 1..10 loop
+    
+    end loop;
+end;
+
+
+create table tblGugudan
+    dan number not null,
+    num number not null,
+    result number not null,
+    
+    constraint tblgugudan_dan_num_pk primary key(dan, num)
+);
+
+alter table tblGugudan
+    add constraint tblgugudan_dan_num_pk primary key(dan, num);
+
+create table tblLoop(
+    seq number primary key,
+    data varchar2(30) not null
+);
+
+
+
+begin
+    for dan in 2..9 loop
+        for num in 1..9 loop
+            insert into tblGugudan (dan, num, result)
+                values (dan, num, dan * num);
+        end loop;
+    end loop;
+end;
+
+end
+
+
+
+
+
+create table tblCourse (
+    seq number(3) primary key,
+    name varchar2(10) not null
+);
+
+create table tblRoom (
+    seq varchar2(10) primary key,
+    cseq number(3) unique,
+    
+    foreign key(cseq) references tblCourse(seq)
+        on delete set null
+);
+
+
+insert into tblCourse values (1, '이유미');
+
+insert into tblCourse values (2, '이유미');
+
+insert into tblCourse values (3, '이유미');
+
+insert into tblCourse values (4, '이유미');
+
+insert into tblCourse values (5, '이유미');
+
+insert into tblRoom values (1, 1);
+insert into tblRoom values (2, 2);
+
+insert into tblRoom values (1, 6);
+
+
+
+drop table tblRoom;
+drop table tblCourse;
+select * from tblRoom;
+select * from tblCourse;
+
+
+
+declare
+    vname tblInsa.name%type;
+    cursur 
+begin
+    select name into vname from tblInsa;
+    dbms_output.put_line(vname);
+end;
+
+
+declare
+    cursor vcursor
+        is select name, jikwi, basicpay from tblInsad where buseo = '기획부' order by num asc;
+    vname tblInsa.name%type;
+    vjikwi tblInsa.jikwi%type;
+    vbasicpay tblInsa.basicpay%type;
+begin
+    cursor vcursor;
+    
+    loop
+        fetch vcursor into vname, vjikwi, vbasicpay;
+        exit when vcursor%notfound;
+        dbms_output.put_line(vname || '_' || vjikwi || '_' || vbasicpay);
+    end loop;
+    
+    close vcursor;
+end;
+
+
+declare
+    cursor vcursor is
+        select * from tblInsa;
+    vrow tblInsa%rowtype;
+begin
+    open vcursor;
+    loop
+        fetch vcursor into vrow;
+        exit when vcursor%notfound;
+        if vrow.jikwi in ('과장', '부장') then
+    end loop;
+    close vcursor;
+end;
+    
+
+
+declare
+    vname number;
+begin
+    dbms_output.put_line('시작');
+    select name into vname from tblInsa where num = '1001';
+    dbms_output.put_line('끝');
+
+exception
+    when others then
+        dbms_output.put_line('예외 처리');
+end;
+
+create table tblLog (
+    seq number primary key,
+    code varchar2(7) not null check (code in ('A001', 'BOO1', 'B002', 'COO2')),
+    message varchar2(1000) not null,
+    regdate date default sysdate not null
+);
+
+create sequence seqLog;
+
+commit;
+rollback;
+delete from tblCountry;
+
+
+select * from tblCountry;
+declare
+    vcnt number;
+    vname tblInsa.name%type;
+begin
+    select count(*) into vcnt from tblCountry;
+    select name into vname from tblInsa where num = '1001';
+    
+    dbms_output.put_line(100/vcnt);
+--exception
+--    when others then
+--        dbms_output.put_line('예외');
+        
+end;
